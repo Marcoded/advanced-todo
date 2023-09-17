@@ -11,7 +11,7 @@
 - Unit test
 - filter par tâche à faire, en retard
 
-# Mon courtier énerger - Project Todo - Marc Pollet
+# Mon Courtier Énergie - Project Todo - Marc Pollet
 
 ## Install
 Clone the repo and run `pnpm i` to install dependencies with PNPM
