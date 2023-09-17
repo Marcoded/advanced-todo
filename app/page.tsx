@@ -1,39 +1,48 @@
-import Link from "next/link"
+"use client"
 
-import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
+import { useContext } from "react"
+import { AnimatePresence, motion } from "framer-motion"
+
+import { TodosContext } from "@/components/context/todosContext"
+import DropDownFilter from "@/components/dropDownFilter"
+import TodoForm from "@/components/todo-form"
+import TodoItem from "@/components/todo-item"
 
 export default function IndexPage() {
+  const { todos, selectedTodos } = useContext(TodosContext)
+
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <div className="flex max-w-[980px] flex-col items-start gap-2">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Beautifully designed components <br className="hidden sm:inline" />
-          built with Radix UI and Tailwind CSS.
-        </h1>
-        <p className="max-w-[700px] text-lg text-muted-foreground">
-          Accessible and customizable components that you can copy and paste
-          into your apps. Free. Open Source. And Next.js 13 Ready.
-        </p>
+      <h1 className="text-center text-sm md:text-3xl mx-auto">
+        Bievenue ! Un petit coup d'oeil sur vos tâches
+      </h1>
+      <div className="flex w-full justify-evenly gap-7 mx-auto">
+        <div className="w-full mx-auto container">
+          <TodoForm />
+        </div>
+        <DropDownFilter />
       </div>
-      <div className="flex gap-4">
-        <Link
-          href={siteConfig.links.docs}
-          target="_blank"
-          rel="noreferrer"
-          className={buttonVariants()}
-        >
-          Documentation
-        </Link>
-        <Link
-          target="_blank"
-          rel="noreferrer"
-          href={siteConfig.links.github}
-          className={buttonVariants({ variant: "outline" })}
-        >
-          GitHub
-        </Link>
-      </div>
+
+      <motion.div
+        className=" container mx-auto justify-center items-center  grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5  "
+        layout
+      >
+        <AnimatePresence>
+          {selectedTodos &&
+            selectedTodos.map((todo) => (
+              <motion.div
+                key={todo.id}
+                className=""
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                layout
+              >
+                <TodoItem todo={todo} />
+              </motion.div>
+            ))}
+        </AnimatePresence>
+      </motion.div>
     </section>
   )
 }

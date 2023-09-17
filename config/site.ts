@@ -1,9 +1,9 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "Next.js",
+  name: "MCE Todo",
   description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+    " Organiser vos tâches et augmenter votre productivité.",
   mainNav: [
     {
       title: "Home",
