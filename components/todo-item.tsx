@@ -1,19 +1,15 @@
 "use client"
 
-import format from "date-fns/format"
-import isToday from "date-fns/isToday"
 import { Check, Trash2 } from "lucide-react"
-import React, { useContext } from "react"
+import { useContext } from "react"
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Ttodos } from "@/types/todos"
 
@@ -21,6 +17,7 @@ import { TodosContext } from "./context/todosContext"
 import DateFormater from "./dateFormater"
 import TodoForm from "./todo-form"
 import { Button } from "./ui/button"
+import TextCropper from "./text-cropper"
 
 interface TodoItemProps {
   todo: Ttodos
@@ -56,7 +53,7 @@ export default function TodoItem(props: TodoItemProps) {
           <Separator />
         </CardHeader>
 
-        <CardContent className=" text-sm max-h-[5rem] overflow-hidden text-ellipsis ">{content}</CardContent>
+        <CardContent className=" text-sm max-h-[5rem] overflow-hidden text-ellipsis "><TextCropper text={content? content : ""} charCount={70}></TextCropper></CardContent>
         <CardFooter className="flex w-full justify-around items-end">
           <Button
             onClick={() => todoContext.toggleDone(id)}

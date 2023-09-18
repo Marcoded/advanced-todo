@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { TtodoForm } from "@/types/todo-form"
+
 import { Ttodos } from "@/types/todos"
 
 import { DatePickerWithPresets } from "./DatePickerWithPresets"
@@ -25,6 +25,14 @@ interface TtodoFormProps {
   todo?: Ttodos
   mode?: "create" | "edit"
 
+}
+
+export interface TtodoForm {
+  mode : "edit" | "create";
+  title : string;
+  content? : string
+  DueDate: Date | undefined
+  id: string 
 }
 
 export default function TodoForm(props: TtodoFormProps) {

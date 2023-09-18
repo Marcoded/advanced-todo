@@ -33,7 +33,7 @@ const futureDate = addDays(today, 2)
 
 const demoTodos: Ttodos[] = [
   {
-    title: "Embaucher Marc",
+    title: "Un Titre !",
     dueDate: futureDate,
     content: "",
     done: false,
@@ -44,16 +44,16 @@ const demoTodos: Ttodos[] = [
     title: "Todo 2",
     dueDate: futureDate,
     content:
-      "Le content de celle ci est un peu long, mais n'ayez crainte ! tout est prévue (enfin pas tout tout quand même) tttttttttttttttttttttttttttttttttttttttttttt overflow is hidden",
-    done: true,
+      "La descrption est un peu longue ! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quae nobis corporis vitae sed laboriosam maiores nemo amet asperiores neque. Debitis fugiat modi totam laboriosam facere eaque ducimus quidem quo. ",
+    done: false,
 
     id: "2",
   },
   {
     title: "Todo 3",
     dueDate: today,
-    content: "Celle ci pour ajd",
-    done: true,
+    content: "Pour aujoud'hui -  Titre Orange MCE",
+    done: false,
 
     id: "3",
   },
@@ -82,9 +82,9 @@ const demoTodos: Ttodos[] = [
     id: "6",
   },
   {
-    title: "For today, already done !",
+    title: "Terminée, titre rayer !",
     dueDate: today,
-    content: "C'est une démo!",
+    content: "Terminée!",
     done: true,
 
     id: "7",
