@@ -35,7 +35,7 @@ const demoTodos: Ttodos[] = [
   {
     title: "Un Titre !",
     dueDate: futureDate,
-    content: "",
+    content: "Et une description",
     done: false,
 
     id: "1",
@@ -58,9 +58,9 @@ const demoTodos: Ttodos[] = [
     id: "3",
   },
   {
-    title: "Finir le responsive",
+    title: "Todo 4",
     dueDate: futureDate,
-    content: "You're late on this one",
+    content: "Une tâche en retard",
     done: false,
 
     id: "4",
