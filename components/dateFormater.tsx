@@ -6,7 +6,7 @@ import { fr } from "date-fns/locale"
 
 export default function DateFormater({ date }: { date: Date | undefined | null }) {
     if (!date) {
-      return <div>Pas de date définie</div>;
+      return <div data-testid="date-output">Pas de date définie</div>;
     }
   
     
@@ -15,16 +15,16 @@ export default function DateFormater({ date }: { date: Date | undefined | null }
   
     if (dateStr < currentDateStr) {
       return (
-        <div className="text-sm text-destructive">
+        <div data-testid="date-output" className="text-sm text-destructive">
           En retard : {format(date, "dd  LLLL yyyy", { locale: fr })}
         </div>
       );
     }
   
     if (dateStr === currentDateStr) {
-      return <div className="text-sm text-mcePrimary">Aujourd'hui</div>;
+      return <div data-testid="date-output" className="text-sm text-mcePrimary">Aujourd'hui</div>;
     }
   
-    return <div className="text-sm ">{format(date, "dd  LLLL yyyy", { locale: fr })}</div>;
+    return <div data-testid="date-output" className="text-sm ">{format(date, "dd  LLLL yyyy", { locale: fr })}</div>;
   }
   

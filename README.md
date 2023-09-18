@@ -1,17 +1,8 @@
-# Requirement
-
-- Ajouter / Supprimer tâches depuis l'écran principal
-- Depuis l'écran principal : Trier les tâches à faire et finies
-- Togle done/todo sur la tâche
-- Date picker sur la tâche
-- Si la tâche est terminer, rayer le titre
-- Si il y a une deadline, il faut l'afficher en dessous du titre - Aujoud'hui si la tâche est aujourd'hui
-- Modifier une tâche
-- modifier l'ordre des taches
-- Unit test
-- filter par tâche à faire, en retard
 
 # Mon Courtier Énergie - Project Todo - Marc Pollet
+
+## Live Version
+https://advanced-todo-inky.vercel.app/
 
 ## Install
 Clone the repo and run `pnpm i` to install dependencies with PNPM
@@ -24,6 +15,7 @@ The above template is a boilerplate that includes
 - Tailwind CSS
 - A light / Dark switch
 - Lucid Icons for the Icons
+- A Navbar
 
 This demo project is client-side, all todos are saved in state
 

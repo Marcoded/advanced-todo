@@ -14,7 +14,7 @@ export default function IndexPage() {
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
       <h1 className="text-center text-sm md:text-3xl mx-auto">
-        Bievenue ! Un petit coup d'oeil sur vos tâches
+      Bienvenue ! Jetons un œil à tes tâches en cours
       </h1>
       <div className="flex w-full justify-evenly gap-7 mx-auto">
         <div className="w-full mx-auto container">
