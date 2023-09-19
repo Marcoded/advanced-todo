@@ -4,7 +4,7 @@ import { TFilters, TodosContext } from "./context/todosContext"
 import { Button } from "./ui/button"
 
 export default function DropDownFilter() {
-  const { toggleFilterState, resetAllFilters, filters } =
+  const { toggleFilterState, filters } =
     useContext(TodosContext)
 
   const handleClick = (filterName: keyof TFilters) => {
@@ -20,7 +20,14 @@ export default function DropDownFilter() {
   }
 
   return (
-    <div className="flex gap-5 flex-wrap md:flex-nowrap">
+    <div className="flex gap-5 flex-wrap md:flex-nowrap align-middle justify-center">
+       <Button
+        className="text-xs md:text-md"
+        variant={getButtonStyle("newestFirst")}
+        onClick={() => handleClick("newestFirst")}
+      >
+        Les plus récentes
+      </Button>
       <Button
         className="text-xs md:text-md"
         variant={getButtonStyle("todayOnly")}
@@ -28,7 +35,7 @@ export default function DropDownFilter() {
       >
         Aujourd'hui
       </Button>
-
+    <div className="h-9 border-l"></div>
       <Button
         className=" text-xs md:text-md"
         variant={getButtonStyle("showFinished")}
@@ -51,15 +58,7 @@ export default function DropDownFilter() {
         En cours
       </Button>
 
-      {isAnyFilterActive() && (
-        <Button
-          onClick={resetAllFilters}
-          className="whitespace-nowrap bg-destructive"
-          variant="outline"
-        >
-          X
-        </Button>
-      )}
+     
     </div>
   )
 }

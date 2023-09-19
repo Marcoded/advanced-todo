@@ -1,7 +1,16 @@
 "use client"
 
 import React, { createContext, useEffect, useState } from "react"
-import { addDays, isFuture, isPast, isToday, subDays } from "date-fns"
+import {
+  addDays,
+  compareAsc,
+  compareDesc,
+  isFuture,
+  isPast,
+  isToday,
+  isValid,
+  subDays,
+} from "date-fns"
 
 import { Ttodos } from "@/types/todos"
 
@@ -11,18 +20,18 @@ export interface TFilters {
   showLate: boolean
   showFuture: boolean
   showActive: boolean
+  newestFirst: boolean
 }
 
 interface TtodosContext {
   todos: Ttodos[] | null
   selectedTodos: Ttodos[] | null
-  filters: TFilters 
+  filters: TFilters
 
   addTodo: (newTodo: Ttodos) => void
   updateTodo: (todo: Ttodos) => void
   deleteTodo: (id: string) => void
   toggleDone: (id: string) => void
-  resetAllFilters: () => void
 
   toggleFilterState: (filter: keyof TFilters) => void
 }
@@ -91,22 +100,23 @@ const demoTodos: Ttodos[] = [
   },
 ]
 
+// Default state
 export const TodosContext = createContext<TtodosContext>({
   todos: [],
   selectedTodos: [],
-  filters:{
+  filters: {
     todayOnly: false,
     showFinished: false,
     showLate: false,
     showFuture: false,
     showActive: true,
+    newestFirst: false,
   },
   addTodo: () => {},
   updateTodo: () => {},
   deleteTodo: () => {},
   toggleDone: () => {},
   toggleFilterState: () => {},
-  resetAllFilters: () => {},
 })
 
 export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -116,12 +126,13 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [selectedTodos, setSelectedTodos] = useState<Ttodos[]>(todos)
 
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<TFilters>({
     todayOnly: false,
     showFinished: false,
     showLate: false,
     showFuture: false,
     showActive: true,
+    newestFirst: false,
   })
 
   useEffect(() => {
@@ -146,7 +157,7 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
       currentTodos = currentTodos.filter((todo) => {
         if (todo.done) return false
         if (!todo.dueDate) return false
-        // Task for todays were also considered "late"
+        // Task for today was also considered "late"
         return isPast(todo.dueDate) && !isToday(todo.dueDate)
       })
     }
@@ -161,6 +172,27 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
         return isFuture(todo.dueDate)
       })
     }
+
+    const noDatesTodos = currentTodos.filter(
+      (todo) => !(todo.dueDate instanceof Date)
+    )
+
+    const todosWithDates = currentTodos.filter(
+      (todo) => todo.dueDate instanceof Date
+    )
+
+    const sortedTodosWithDates = todosWithDates.sort((a, b) => {
+      if (!a.dueDate || !b.dueDate) return 0
+      if (filters.newestFirst) {
+        return compareDesc(a.dueDate, b.dueDate)
+      } else {
+        // sortByOldest
+        return compareAsc(a.dueDate, b.dueDate)
+      }
+    })
+
+    currentTodos = [...sortedTodosWithDates, ...noDatesTodos]
+
     return currentTodos
   }
 
@@ -181,7 +213,11 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   const updateTodo = (todo: Ttodos) => {
-    setTodos(todos.map((modifiedTodo) => (modifiedTodo.id === todo.id ? todo : modifiedTodo)))
+    setTodos(
+      todos.map((modifiedTodo) =>
+        modifiedTodo.id === todo.id ? todo : modifiedTodo
+      )
+    )
   }
 
   const toggleFilterState = (filterKey: keyof TFilters) => {
@@ -189,15 +225,6 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
       ...prevFilters,
       [filterKey]: !prevFilters[filterKey],
     }))
-  }
-
-  const resetAllFilters = () => {
-    const updatedFilters: TFilters = { ...filters }
-
-    for (const key in updatedFilters) {
-      updatedFilters[key as keyof TFilters] = false
-    }
-    setFilters(updatedFilters)
   }
 
   return (
@@ -210,8 +237,7 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
         deleteTodo,
         toggleDone,
         toggleFilterState,
-        resetAllFilters,
-        filters
+        filters,
       }}
     >
       {children}

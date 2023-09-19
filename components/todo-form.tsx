@@ -48,6 +48,15 @@ export default function TodoForm(props: TtodoFormProps) {
     id: props.todo ? props.todo.id : crypto.randomUUID(),
   })
 
+  const resetInput = () => {
+    setTodoFormState(state => ({
+      ...state,
+      title: "",
+      content: "",
+      DueDate: undefined
+    }));
+  };
+
   const [titleValidation, setTitleValidation] = useState(false)
 
   useEffect(() => {
@@ -100,6 +109,7 @@ export default function TodoForm(props: TtodoFormProps) {
         done: false,
         id: crypto.randomUUID(),
       }
+      resetInput()
       return addTodo(newTodo)
     }
 
@@ -176,7 +186,7 @@ export default function TodoForm(props: TtodoFormProps) {
             </DialogTrigger>
             <DialogTrigger asChild>
               <Button onClick={(e) => handleSubmit(e)} className="bg-mceAccent">
-                Créer
+                {props.mode === "create" ? "Créer" : "Modifier"}
               </Button>
             </DialogTrigger>
           </CardFooter>
