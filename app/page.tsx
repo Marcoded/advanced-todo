@@ -16,10 +16,10 @@ export default function IndexPage() {
       <h1 className="text-center text-sm md:text-3xl mx-auto">
       Bienvenue ! Jetons un œil à vos tâches en cours
       </h1>
-      <div className="flex w-full justify-evenly gap-7 mx-auto">
-        <div className="w-full mx-auto container">
+      <div className="flex md:flex-nowrap flex-wrap  w-full md:justify-evenly  justify-center gap-7 mx-auto">
+      
           <TodoForm />
-        </div>
+      
         <DropDownFilter />
       </div>
 

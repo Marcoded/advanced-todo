@@ -20,7 +20,7 @@ export default function DropDownFilter() {
   }
 
   return (
-    <div className="flex gap-5 flex-wrap md:flex-nowrap align-middle justify-center">
+    <div className="flex gap-5 sm:flex-nowrap flex-wrap  align-middle justify-center">
       <Button
         className="text-xs md:text-md"
         variant={getButtonStyle("newestFirst")}
@@ -29,7 +29,7 @@ export default function DropDownFilter() {
         <MoveHorizontal />
       </Button>
       
-      <div className="h-9 border-l-2"></div>
+      {/* <div className="h-9 border-l-2"></div> */}
 
       <Button
         className="text-xs md:text-md"
@@ -47,7 +47,7 @@ export default function DropDownFilter() {
         En retard
       </Button>
 
-      <div className="h-9 border-l-2"></div>
+      {/* <div className="h-9 border-l-2"></div> */}
 
       <Button
         className=" text-xs md:text-md"
