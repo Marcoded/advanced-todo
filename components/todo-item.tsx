@@ -1,23 +1,23 @@
 "use client"
 
-import { Check, Trash2 } from "lucide-react"
 import { useContext } from "react"
+import { Check, Trash2 } from "lucide-react"
 
+import { Ttodos } from "@/types/todos"
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Ttodos } from "@/types/todos"
 
 import { TodosContext } from "./context/todosContext"
 import DateFormater from "./dateFormater"
+import TextCropper from "./text-cropper"
 import TodoForm from "./todo-form"
 import { Button } from "./ui/button"
-import TextCropper from "./text-cropper"
 
 interface TodoItemProps {
   todo: Ttodos
@@ -32,6 +32,12 @@ export default function TodoItem(props: TodoItemProps) {
     "w-[15rem] min-h-[17rem] flex flex-col mx-auto justify-around hover:scale-105 transition-all ease-in-out duration-100"
   const variable = done === true ? "bg-muted " : " "
 
+  const DoneButtonStyle = () => {
+    const baseClass = "hover:bg-mcePrimary "
+    const style = done === true ? "bg-mceAccent" : ""
+    return baseClass + style
+  }
+
   return (
     <>
       <Card className={variable + baseCardClass}>
@@ -44,20 +50,21 @@ export default function TodoItem(props: TodoItemProps) {
             )}
           </CardTitle>
 
-          {done === false ? (
-            <DateFormater date={dueDate} />
-          ) : (
-            <div className="text-sm">Tâche terminée</div>
-          )}
+          <DateFormater date={dueDate} done={done} />
 
           <Separator />
         </CardHeader>
 
-        <CardContent className=" text-sm max-h-[5rem] overflow-hidden text-ellipsis "><TextCropper text={content? content : ""} charCount={70}></TextCropper></CardContent>
+        <CardContent className=" text-sm max-h-[5rem] overflow-hidden text-ellipsis ">
+          <TextCropper
+            text={content ? content : ""}
+            charCount={70}
+          ></TextCropper>
+        </CardContent>
         <CardFooter className="flex w-full justify-around items-end">
           <Button
             onClick={() => todoContext.toggleDone(id)}
-            className="hover:bg-mcePrimary"
+            className={DoneButtonStyle()}
             variant="outline"
             size="icon"
           >

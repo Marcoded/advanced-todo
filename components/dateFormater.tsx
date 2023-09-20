@@ -1,30 +1,50 @@
-"use client"
+import React from "react";
+import { format, isPast, isToday } from "date-fns";
+import { fr } from "date-fns/locale";
 
-import React from "react"
-import { format, isToday } from "date-fns"
-import { fr } from "date-fns/locale"
+export default function DateFormater({ date, done }: { date: Date | undefined | null, done: boolean }) {
+  
+  // Function to determine style and content
+  const getDisplayData = () => {
+    if (!date) return { content: "Pas de date définie", style: "" };
 
-export default function DateFormater({ date }: { date: Date | undefined | null }) {
-    if (!date) {
-      return <div data-testid="date-output">Pas de date définie</div>;
+    // Check if the task is done first to account for all scenarios related to "done"
+    if (done) {
+      let content = format(date, "dd LLLL yyyy", { locale: fr });
+      if (isToday(date)) {
+        content = "Aujourd'hui";
+      }
+      return {
+        content,
+        style: "text-sm text-muted-foreground line-through",
+      };
     }
-  
-    
-    const currentDateStr = format(new Date(), "yyyy-MM-dd");
-    const dateStr = format(date, "yyyy-MM-dd");
-  
-    if (dateStr < currentDateStr) {
-      return (
-        <div data-testid="date-output" className="text-sm text-destructive">
-          En retard : {format(date, "dd  LLLL yyyy", { locale: fr })}
-        </div>
-      );
+
+    if (isToday(date)) {
+      return {
+        content: "Aujourd'hui",
+        style: "text-sm text-mcePrimary",
+      };
     }
-  
-    if (dateStr === currentDateStr) {
-      return <div data-testid="date-output" className="text-sm text-mcePrimary">Aujourd'hui</div>;
+
+    if (isPast(date)) {
+      return {
+        content: "En retard " + format(date, "dd LLLL yyyy", { locale: fr }),
+        style: "text-sm text-destructive",
+      };
     }
-  
-    return <div data-testid="date-output" className="text-sm ">{format(date, "dd  LLLL yyyy", { locale: fr })}</div>;
-  }
-  
+
+    return {
+      content: format(date, "dd LLLL yyyy", { locale: fr }),
+      style: "text-sm",
+    };
+  };
+
+  const { content, style } = getDisplayData();
+
+  return (
+    <div data-testid="date-output" className={style}>
+      {content}
+    </div>
+  );
+}

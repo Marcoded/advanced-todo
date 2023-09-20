@@ -1,8 +1,10 @@
 "use client"
 
+import { json } from "stream/consumers"
 import { useContext, useEffect, useState } from "react"
 
 
+import { Ttodos } from "@/types/todos"
 import { Button } from "@/components/ui/button"
 import {
   CardContent,
@@ -16,52 +18,49 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
-import { Ttodos } from "@/types/todos"
-
 import { DatePickerWithPresets } from "./DatePickerWithPresets"
 import { TodosContext } from "./context/todosContext"
 
 interface TtodoFormProps {
   todo?: Ttodos
   mode?: "create" | "edit"
-
 }
 
 export interface TtodoForm {
-  mode : "edit" | "create";
-  title : string;
-  content? : string
+  mode: "edit" | "create"
+  title: string
+  content?: string
   DueDate: Date | undefined
-  id: string 
+  id: string
 }
 
 export default function TodoForm(props: TtodoFormProps) {
   const { addTodo, updateTodo } = useContext(TodosContext)
 
- 
-
   const [todoFormState, setTodoFormState] = useState<TtodoForm>({
     mode: props.mode ? props.mode : "create",
     title: props.todo ? props.todo.title : "",
     content: props.todo ? props.todo.content : "",
-    DueDate: props.todo? props.todo.dueDate : undefined,
+    DueDate: props.todo ? props.todo.dueDate : undefined,
     id: props.todo ? props.todo.id : crypto.randomUUID(),
   })
 
   const resetInput = () => {
-    setTodoFormState(state => ({
+    setTodoFormState((state) => ({
       ...state,
       title: "",
       content: "",
-      DueDate: undefined
-    }));
-  };
+      DueDate: undefined,
+    }))
+  }
 
   const [titleValidation, setTitleValidation] = useState(false)
+  const [hasTriedSubmit, setHasTriedSubmit] = useState(false)
 
   useEffect(() => {
-    setTitleValidation(isTitlePresent)
-  
+    if (hasTriedSubmit) {
+      setTitleValidation(isTitlePresent)
+    }
   }, [todoFormState])
 
   const setDueDate = (newDate: Date | undefined) => {
@@ -87,17 +86,17 @@ export default function TodoForm(props: TtodoFormProps) {
 
 
   const computeBorderColor = () => {
-    if (titleValidation) {
-      return ""
+    if (!titleValidation && hasTriedSubmit) {
+      return "border-destructive"
     }
-    return "border-destructive"
-  
+    return ""
   }
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     // We're not creating the task if there is no title provided
     if (!isTitlePresent()) {
       e.preventDefault()
+      setHasTriedSubmit(true)
       return
     }
 
@@ -137,7 +136,6 @@ export default function TodoForm(props: TtodoFormProps) {
           </Button>
         </DialogTrigger>
         <DialogContent>
-        
           <CardHeader>
             <CardTitle className="text-mcePrimary">
               {todoFormState.mode === "create"
@@ -176,7 +174,15 @@ export default function TodoForm(props: TtodoFormProps) {
                 <Label className="text-mceAccent" htmlFor="Date">
                   Date
                 </Label>
-                <DatePickerWithPresets existingDate={props.todo?.dueDate}  setDueDate={setDueDate} />
+                <div className="flex items-center gap-4">
+                  <DatePickerWithPresets
+                    existingDate={props.todo?.dueDate}
+                    setDueDate={setDueDate}
+                  />
+                  <button>
+         
+                  </button>
+                </div>
               </div>
             </div>
           </CardContent>
@@ -186,7 +192,7 @@ export default function TodoForm(props: TtodoFormProps) {
             </DialogTrigger>
             <DialogTrigger asChild>
               <Button onClick={(e) => handleSubmit(e)} className="bg-mceAccent">
-                {props.mode === "create" ? "Créer" : "Modifier"}
+                {todoFormState.mode === "create" ? "Créer" : "Modifier"}
               </Button>
             </DialogTrigger>
           </CardFooter>

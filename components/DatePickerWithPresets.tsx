@@ -1,8 +1,8 @@
 "use client"
 
-
+import { useEffect, useState } from "react"
 import { addDays, format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
+import { Calendar as CalendarIcon, X as XIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -19,44 +19,47 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useEffect, useState } from "react"
 
-
-
-type TSetDueDateFunction = (date: Date | undefined) => void; 
-
+type TSetDueDateFunction = (date: Date | undefined) => void
 
 type DatePickerWithPresetsProps = {
-  setDueDate: TSetDueDateFunction;
-  existingDate?: Date;
-};
+  setDueDate: TSetDueDateFunction
+  existingDate?: Date
+}
 
-export function DatePickerWithPresets(props:DatePickerWithPresetsProps) {
+export function DatePickerWithPresets(props: DatePickerWithPresetsProps) {
   const [date, setDate] = useState<Date | undefined>(props.existingDate)
 
   const setDueDate = props.setDueDate
 
-  
+  const handleDateReset = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDate(undefined)
+  }
 
   useEffect(() => {
-      setDueDate(date)
-  }, [date]);
-
-
+    setDueDate(date)
+  }, [date])
 
   return (
-    <Popover >
+    <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant={"outline"}
-          className={cn(
-            "w-[280px] justify-start text-left font-normal",
-            !date && "text-muted-foreground"
-          )}
-        >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Selectionner une date</span>}
-        </Button>
+        <div className="flex items-center gap-5">
+          <Button
+            variant={"outline"}
+            className={cn(
+              "w-[280px] justify-start text-left font-normal",
+              !date && "text-muted-foreground"
+            )}
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {date ? format(date, "PPP") : <span>Selectionner une date</span>}
+          </Button>
+          <button onClick={handleDateReset}>
+            <XIcon className="stroke-foreground"></XIcon>
+          </button>
+        </div>
       </PopoverTrigger>
       <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
         <Select

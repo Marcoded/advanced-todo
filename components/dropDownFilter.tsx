@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react"
+import { MoveHorizontal } from "lucide-react"
 
 import { TFilters, TodosContext } from "./context/todosContext"
 import { Button } from "./ui/button"
 
 export default function DropDownFilter() {
-  const { toggleFilterState, filters } =
-    useContext(TodosContext)
+  const { toggleFilterState, filters } = useContext(TodosContext)
 
   const handleClick = (filterName: keyof TFilters) => {
     toggleFilterState(filterName)
@@ -21,13 +21,16 @@ export default function DropDownFilter() {
 
   return (
     <div className="flex gap-5 flex-wrap md:flex-nowrap align-middle justify-center">
-       <Button
+      <Button
         className="text-xs md:text-md"
         variant={getButtonStyle("newestFirst")}
         onClick={() => handleClick("newestFirst")}
       >
-        Les plus récentes
+        <MoveHorizontal />
       </Button>
+      
+      <div className="h-9 border-l-2"></div>
+
       <Button
         className="text-xs md:text-md"
         variant={getButtonStyle("todayOnly")}
@@ -35,14 +38,7 @@ export default function DropDownFilter() {
       >
         Aujourd'hui
       </Button>
-    <div className="h-9 border-l"></div>
-      <Button
-        className=" text-xs md:text-md"
-        variant={getButtonStyle("showFinished")}
-        onClick={() => handleClick("showFinished")}
-      >
-        Terminée
-      </Button>
+
       <Button
         className="whitespace-nowrap text-xs  md:text-md"
         variant={getButtonStyle("showLate")}
@@ -50,6 +46,17 @@ export default function DropDownFilter() {
       >
         En retard
       </Button>
+
+      <div className="h-9 border-l-2"></div>
+
+      <Button
+        className=" text-xs md:text-md"
+        variant={getButtonStyle("showFinished")}
+        onClick={() => handleClick("showFinished")}
+      >
+        Terminée
+      </Button>
+      
       <Button
         className="whitespace-nowrap  text-xs  md:text-md"
         variant={getButtonStyle("showActive")}
@@ -57,8 +64,6 @@ export default function DropDownFilter() {
       >
         En cours
       </Button>
-
-     
     </div>
   )
 }

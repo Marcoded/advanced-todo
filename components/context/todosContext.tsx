@@ -51,7 +51,7 @@ const demoTodos: Ttodos[] = [
   },
   {
     title: "Todo 2",
-    dueDate: futureDate,
+    dueDate: addDays(futureDate,2),
     content:
       "La descrption est un peu longue ! Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quae nobis corporis vitae sed laboriosam maiores nemo amet asperiores neque. Debitis fugiat modi totam laboriosam facere eaque ducimus quidem quo. ",
     done: false,
@@ -68,7 +68,7 @@ const demoTodos: Ttodos[] = [
   },
   {
     title: "Todo 4",
-    dueDate: futureDate,
+    dueDate: addDays(futureDate,5),
     content: "Une tâche en retard",
     done: false,
 
@@ -76,7 +76,7 @@ const demoTodos: Ttodos[] = [
   },
   {
     title: "Finie, et en retard",
-    dueDate: pastDate,
+    dueDate: subDays(pastDate,2),
     content: "Aussi en retard",
     done: true,
 
@@ -225,7 +225,17 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
       ...prevFilters,
       [filterKey]: !prevFilters[filterKey],
     }))
+    ensureCoherentFilterState(filterKey)
   }
+
+  // Guard clause
+  const ensureCoherentFilterState = (lastFilter: keyof TFilters) => {
+    if (lastFilter === 'showActive' && filters.showFinished) setFilters(prevFilters => ({ ...prevFilters, showFinished: false }));
+    if (lastFilter === 'showFinished' && (filters.showActive || filters.showLate)) setFilters(prevFilters => ({ ...prevFilters, showActive: false, showLate: false }));
+    if (lastFilter === 'showLate' && (filters.todayOnly || filters.showFinished)) setFilters(prevFilters => ({ ...prevFilters, todayOnly: false, showFinished: false }));
+    if (lastFilter === 'todayOnly' && filters.showLate) setFilters(prevFilters => ({ ...prevFilters, showLate: false }));
+  }
+  
 
   return (
     <TodosContext.Provider
