@@ -14,12 +14,13 @@ export default function IndexPage() {
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
       <h1 className="text-center text-sm md:text-3xl mx-auto">
-      Bienvenue ! Jetons un œil à vos tâches en cours
+        Bienvenue ! Jetons un œil à vos tâches en cours
       </h1>
-      <div className="flex md:flex-nowrap flex-wrap  w-full md:justify-evenly  justify-center gap-7 mx-auto">
-      
+      <div className="flex w-full flex-wrap md:flex-nowrap border   justify-evenly gap-7 mx-auto container">
+  
+        <div className="mx-auto  ">
           <TodoForm />
-      
+        </div>
         <DropDownFilter />
       </div>
 
