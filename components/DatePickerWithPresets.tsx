@@ -45,7 +45,7 @@ export function DatePickerWithPresets(props: DatePickerWithPresetsProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-3">
           <Button
             variant={"outline"}
             className={cn(

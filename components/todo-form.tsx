@@ -3,7 +3,6 @@
 import { json } from "stream/consumers"
 import { useContext, useEffect, useState } from "react"
 
-
 import { Ttodos } from "@/types/todos"
 import { Button } from "@/components/ui/button"
 import {
@@ -82,8 +81,6 @@ export default function TodoForm(props: TtodoFormProps) {
     }
     return false
   }
-
-
 
   const computeBorderColor = () => {
     if (!titleValidation && hasTriedSubmit) {
@@ -172,16 +169,13 @@ export default function TodoForm(props: TtodoFormProps) {
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label className="text-mceAccent" htmlFor="Date">
-                  Date
+                  Date limite
                 </Label>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <DatePickerWithPresets
                     existingDate={props.todo?.dueDate}
                     setDueDate={setDueDate}
                   />
-                  <button>
-         
-                  </button>
                 </div>
               </div>
             </div>
