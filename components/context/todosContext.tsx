@@ -12,7 +12,7 @@ import {
   subDays,
 } from "date-fns"
 
-import { Ttodos } from "@/types/todos"
+import { Tserializedtodos, Ttodos } from "@/types/todos"
 
 export interface TFilters {
   todayOnly: boolean
@@ -24,14 +24,16 @@ export interface TFilters {
 }
 
 interface TtodosContext {
-  todos: Ttodos[] | null
-  selectedTodos: Ttodos[] | null
+  todos: Ttodos[]
+  selectedTodos: Ttodos[]
+  todoAreLoading: boolean
   filters: TFilters
 
   addTodo: (newTodo: Ttodos) => void
   updateTodo: (todo: Ttodos) => void
   deleteTodo: (id: string) => void
   toggleDone: (id: string) => void
+  loadDemoTodos: () => void
 
   toggleFilterState: (filter: keyof TFilters) => void
 }
@@ -91,10 +93,9 @@ const demoTodos: Ttodos[] = [
     id: "6",
   },
   {
-    title: "Terminée, titre rayer !",
-    dueDate: today,
-    content: "Terminée!",
-    done: true,
+    title: "Pas de date!",
+    content: "Pas de date !",
+    done: false,
 
     id: "7",
   },
@@ -104,6 +105,7 @@ const demoTodos: Ttodos[] = [
 export const TodosContext = createContext<TtodosContext>({
   todos: [],
   selectedTodos: [],
+  todoAreLoading: true,
   filters: {
     todayOnly: false,
     showFinished: false,
@@ -117,14 +119,16 @@ export const TodosContext = createContext<TtodosContext>({
   deleteTodo: () => {},
   toggleDone: () => {},
   toggleFilterState: () => {},
+  loadDemoTodos: () => {},
 })
 
 export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [todos, setTodos] = useState<Ttodos[]>(demoTodos)
+  const [todos, setTodos] = useState<Ttodos[]>([])
+  const [todoAreLoading, setTodoAreLoading] = useState(true)
 
-  const [selectedTodos, setSelectedTodos] = useState<Ttodos[]>(todos)
+  const [selectedTodos, setSelectedTodos] = useState<Ttodos[]>([])
 
   const [filters, setFilters] = useState<TFilters>({
     todayOnly: false,
@@ -136,8 +140,60 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
   })
 
   useEffect(() => {
-    setSelectedTodos(applyFilters(todos))
+    if (todos) setSelectedTodos(applyFilters(todos))
   }, [todos, filters])
+
+  const loadFromLocalStorage = () => {
+    try {
+      setTodoAreLoading(true)
+      const savedTodos = localStorage.getItem("SavedTodos")
+      if (savedTodos) {
+        const deserializedTodos: Ttodos[] = safeTodoDeserialize(
+          JSON.parse(savedTodos)
+        )
+        setTodos(deserializedTodos)
+      }
+    } catch {
+      setTodos([])
+    } finally {
+      setTodoAreLoading(false)
+    }
+  }
+
+  const saveTodoToLocalStorage = () => {
+    if (!todos || todos.length === 0) return
+    const serializedTodos = JSON.stringify(todos)
+    localStorage.setItem("SavedTodos", serializedTodos)
+  }
+
+  const safeTodoDeserialize = (localTodos: Tserializedtodos[]) => {
+    return localTodos.map((todo) => ({
+      ...todo,
+      dueDate: dateDeserializer(todo.dueDate),
+    }))
+  }
+  const dateDeserializer = (
+    potentialDate: string | undefined
+  ): Date | undefined => {
+    if (potentialDate) {
+      const date = new Date(potentialDate)
+      if (isValid(date)) return date
+    }
+    return undefined
+  }
+
+  useEffect(() => {
+    loadFromLocalStorage()
+  }, [])
+
+  useEffect(() => {
+    if (todos.length > 0) {
+      saveTodoToLocalStorage()
+    } else {
+      // Making sure we completly clear the local storage when there is not todos in snate anymore
+      localStorage.removeItem("SavedTodos")
+    }
+  }, [todos])
 
   const applyFilters = (todos: Ttodos[]) => {
     let currentTodos = [...todos]
@@ -196,16 +252,8 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
     return currentTodos
   }
 
-  const saveTolocalStorage = () => {
-    return 'todo'
-  }
-
-  const clearLocalStorage = () => {
-    return "todo"
-  }
-
-  const loadFromLocalStorage = () => {
-    return "todo"
+  const loadDemoTodos = () => {
+    setTodos(demoTodos)
   }
 
   const addTodo = (newTodo: Ttodos) => {
@@ -280,6 +328,8 @@ export const TodosProvider: React.FC<{ children: React.ReactNode }> = ({
         toggleDone,
         toggleFilterState,
         filters,
+        loadDemoTodos,
+        todoAreLoading,
       }}
     >
       {children}

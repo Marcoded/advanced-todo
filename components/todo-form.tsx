@@ -19,15 +19,19 @@ import { Textarea } from "@/components/ui/textarea"
 
 import { DatePickerWithPresets } from "./DatePickerWithPresets"
 import { TodosContext } from "./context/todosContext"
+import { stringify } from "querystring"
+import { Heading1 } from "lucide-react"
 
 interface TtodoFormProps {
   todo?: Ttodos
   mode?: "create" | "edit"
+  displayValue?: string
 }
 
 export interface TtodoForm {
   mode: "edit" | "create"
   title: string
+  displayValue?: string
   content?: string
   DueDate: Date | undefined
   id: string
@@ -121,16 +125,23 @@ export default function TodoForm(props: TtodoFormProps) {
     }
   }
 
+  const renderDialogTrigger = () => {
+    if (props.displayValue) return (<button className="underline">{props.displayValue}</button>)
+    return ( <Button
+      className="hover:bg-mceAccent whitespace-nowrap "
+      variant="outline"
+    >
+      {todoFormState.mode === "create" ? "Nouvelle tâche" : "Modifier"}
+    </Button>
+
+    )
+  }
+
   return (
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button
-            className="hover:bg-mceAccent whitespace-nowrap "
-            variant="outline"
-          >
-            {todoFormState.mode === "create" ? "Nouvelle tâche" : "Modifier"}
-          </Button>
+         {renderDialogTrigger()}
         </DialogTrigger>
         <DialogContent>
           <CardHeader>

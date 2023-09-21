@@ -29,7 +29,7 @@ export default function TodoItem(props: TodoItemProps) {
   const { title, done, dueDate, content, id } = props.todo
 
   const baseCardClass =
-    "w-[15rem] min-h-[17rem] flex flex-col mx-auto justify-around hover:scale-105 transition-all ease-in-out duration-100"
+    "w-[15rem] min-h-[17rem] flex flex-col mx-auto justify-around hover:scale-105 transition-all ease-in-out duration-100 shadow-lg"
   const variable = done === true ? "bg-muted " : " "
 
   const DoneButtonStyle = () => {
