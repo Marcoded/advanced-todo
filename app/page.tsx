@@ -16,13 +16,12 @@ export default function IndexPage() {
       <h1 className="text-center text-sm md:text-3xl mx-auto">
         Bienvenue ! Jetons un œil à vos tâches en cours
       </h1>
-      <div className="flex w-full flex-wrap md:flex-nowrap border   justify-evenly gap-7 mx-auto container">
-  
-        <div className="mx-auto  ">
-          <TodoForm />
-        </div>
-        <DropDownFilter />
-      </div>
+<div className="flex flex-col md:flex-row items-center w-full justify-evenly md:flex-nowrap flex-wrap gap-7 mx-auto container">
+  <div className="w-auto md:w-full mx-auto ">
+    <TodoForm />
+  </div>
+  <DropDownFilter />
+</div>
 
       <motion.div
         className=" container mx-auto justify-center items-center  grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5  "
